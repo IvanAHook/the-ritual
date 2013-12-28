@@ -22,17 +22,15 @@ function game.load()
     game.objects.character.fixture:setFriction(4.0)
 
     game.objects.box = {}
-    print("objects: " , #objects )
     for i = 1, #objects do
-        body = love.physics.newBody(world, (objects[i].x)*size, objects[i].y*size)
-        shape = love.physics.newRectangleShape(objects[i].width*size,size)
+        --print("i", i, "x: ", objects[i].x, " y: ", objects[i].y, "width: ", objects[i].width)
+        body = love.physics.newBody(world, objects[i].x*size, objects[i].y*size)
+        shape = love.physics.newRectangleShape((objects[i].width*size),size)
         fixture = love.physics.newFixture(body, shape)
 
         object = {body=body,shape=shape,fixture=fixture}
         table.insert(game.objects.box, object)
-       -- print ("inserted object on x: ", game.objects.box[i].x, "y: ", game.objects.box[i].y)
     end
-    print("box",#game.objects.box)
 
 end
 
