@@ -24,12 +24,12 @@ function game.load()
     game.objects.box = {}
     for i = 1, #objects do
         --print("i", i, "x: ", objects[i].x, " y: ", objects[i].y, "width: ", objects[i].width)
-        body = love.physics.newBody(world, objects[i].x*size, objects[i].y*size)
-        shape = love.physics.newRectangleShape((objects[i].width*size),size)
+        body = love.physics.newBody(world, (objects[i].x*size), (objects[i].y*size))
+        shape = love.physics.newRectangleShape(size,size)
         fixture = love.physics.newFixture(body, shape)
 
-        object = {body=body,shape=shape,fixture=fixture}
-        table.insert(game.objects.box, object)
+        table.insert(game.objects.box, {body=body,shape=shape,fixture=fixture})
+        --print("i", i, "x: ", body:getX(), " y: ", body:getY(), "width: ", objects[i].width)
     end
 
 end
@@ -56,7 +56,9 @@ function game.draw()
     love.graphics.polygon("fill", game.objects.ground.body:getWorldPoints(game.objects.ground.shape:getPoints())) -- draw a "filled in" polygon using the ground's coordinates
 
     love.graphics.setColor(193, 47, 14) --set the drawing color to red for the ball
-    love.graphics.polygon("fill", game.objects.character.body:getWorldPoints(game.objects.character.shape:getPoints()))
+    love.graphics.rectangle("fill", game.objects.character.body:getX(),
+                                  game.objects.character.body:getY(),
+                                  20,20)
 
     love.graphics.setColor(0,0,0)
     for i = 1,#game.objects.box do
