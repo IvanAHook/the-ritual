@@ -3,8 +3,11 @@ game = {}
 --require('character')
 
 function game.load()
+    size = 20
     love.physics.setMeter(64)
     world = love.physics.newWorld(0, 9.81*64, true)
+
+    objects = createlevel.get_objects_from_file('map')
 
     game.objects = {}
 
@@ -77,6 +80,10 @@ function game.keypressed(key)
     game.objects.character.body:applyForce(0, 0) -- *game.objects.character.preoperties.jump or something in that manner
 end
 
+function game.set_level_objects(objects)
+    level_objects = objects
+end
+
 function game.draw()
     -- for each in game.objects do
     love.graphics.setColor(72, 160, 14) -- set the drawing color to green for the ground
@@ -90,6 +97,7 @@ function game.draw()
                                     game.objects.roof.shape:getPoints()))
 
     love.graphics.setColor(193, 47, 14) --set the drawing color to red for the ball
+<<<<<<< HEAD
     love.graphics.polygon("fill", game.objects.character.body:getWorldPoints(
                                     game.objects.character.shape:getPoints()))
     love.graphics.setColor(193, 147, 14)
@@ -98,5 +106,16 @@ function game.draw()
 --    love.graphics.rectangle("fill", game.objects.character.body:getX()-10,
 --                                    game.objects.character.body:getY()-10,
 --                                    20, 20)
+=======
+    love.graphics.rectangle("fill", game.objects.character.body:getX(),
+                                  game.objects.character.body:getY(),
+                                  20,20)
+
+    love.graphics.setColor(0,0,0)
+    for i = 1,#game.objects.box do
+        love.graphics.polygon("fill", game.objects.box[i].body:getWorldPoints(game.objects.box[i].shape:getPoints()))
+    end
+
+>>>>>>> d71a4cbc90a4bbd8100539f8b8a1a62c1a4be3c9
 end
 

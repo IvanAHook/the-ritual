@@ -1,10 +1,14 @@
 -- debug = false
+require('character')
+require('createlevel')
 require('splash')
 require('game')
 
 state = "game"
 
+
 function love.load()
+    character.load()
     splash.load()
     game.load()
     love.graphics.setBackgroundColor(104, 136, 248)
