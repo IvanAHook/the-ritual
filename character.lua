@@ -1,7 +1,11 @@
+
 character = {}
 
-function character.load() -- move th physics object character to game.lua!!!!
-
+function character.load()
+    -- is this a good model?
+    -- character.properties.x_velocity = 0
+    -- character.properties.y_velocity = 0
+    -- character.state = ""
 end
 
 function character.update(dt)
@@ -12,5 +16,9 @@ function character.draw()
 end
 
 function character.keypressed()
+
+end
+
+function character.jump()
 
 end
