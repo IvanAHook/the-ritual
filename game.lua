@@ -1,57 +1,48 @@
+
+require('createlevel')
+require('character')
 require('camera')
 game = {}
 
 direction = 10
 
---require('character')
-
 function game.load()
+    brick = love.graphics.newImage("bricks.jpg") -- store in table!!!
+    text = ""
     size = 20
     love.physics.setMeter(64)
+
     world = love.physics.newWorld(0, 9.81*64, true)
+    world:setCallbacks(beginContact, endContact)
 
-    objects = createlevel.get_objects_from_file('map')
+    objects = createlevel.get_objects_from_file("map")
 
-    game.objects = {}
+    game.objects = {} -- change to world.objects = {} and npc = {}
 
     game.objects.ground = {}
-    game.objects.ground.body = love.physics.newBody(world, 1280/2, 650-50/2, "static") -- static is default, typed for clarity
-    game.objects.ground.shape = love.physics.newRectangleShape(1280, 50)
+    game.objects.ground.body = love.physics.newBody(world, 2000/2, 650-50/2, "static") -- static is default, typed for clarity
+    game.objects.ground.shape = love.physics.newRectangleShape(2000, 50)
     game.objects.ground.fixture = love.physics.newFixture(
                                     game.objects.ground.body,
                                     game.objects.ground.shape)
+    game.objects.ground.fixture:setUserData("ground")
+
     game.objects.l_wall = {}
-    game.objects.l_wall.body = love.physics.newBody(world, 50-50/2, 1000/2, "static") -- all the /2 is because of body and shape origin
-    game.objects.l_wall.shape = love.physics.newRectangleShape(50, 1000)
+    game.objects.l_wall.body = love.physics.newBody(world, 50-50/2, 625/2, "static") -- all the /2 is because of body and shape origin
+    game.objects.l_wall.shape = love.physics.newRectangleShape(50, 625)
     game.objects.l_wall.fixture = love.physics.newFixture(
                                     game.objects.l_wall.body,
                                     game.objects.l_wall.shape)
+    game.objects.l_wall.fixture:setUserData("l_wall")
 
     game.objects.r_wall = {}
-    game.objects.r_wall.body = love.physics.newBody(world, 800-50/2, 1000/2, "static")
-    game.objects.r_wall.shape = love.physics.newRectangleShape(50, 1000)
+    game.objects.r_wall.body = love.physics.newBody(world, 2000-50/2, 625/2, "static")
+    game.objects.r_wall.shape = love.physics.newRectangleShape(50, 625)
     game.objects.r_wall.fixture = love.physics.newFixture(
                                     game.objects.r_wall.body,
                                     game.objects.r_wall.shape)
+    game.objects.r_wall.fixture:setUserData("r_wall")
 
-    game.objects.roof = {}
-    game.objects.roof.body = love.physics.newBody(world, 1280/2, 0+50/2, "static")
-    game.objects.roof.shape = love.physics.newRectangleShape(1280, 50)
-    game.objects.roof.fixture = love.physics.newFixture(
-                                    game.objects.roof.body,
-                                    game.objects.roof.shape)
-    game.objects.character = {}
-
-    -- require('character') and add init function to make this possible?
-    -- game.objects.character.properties = character:init()
-    game.objects.character.body = love.physics.newBody(world, 500-20/2, 500-20/2, "dynamic")
-
-    game.objects.character.shape = love.physics.newRectangleShape(20, 20)
-    game.objects.character.fixture = love.physics.newFixture(
-                                        game.objects.character.body,
-                                        game.objects.character.shape)
-    game.objects.character.fixture:setRestitution(0.0)
-    -- game.objects.character.fixture:setFriction(4.0)
     game.objects.quads = {}
 
     for i = 1, #objects do
@@ -59,46 +50,39 @@ function game.load()
         body = love.physics.newBody(world, (objects[i].x*size)-size/2, (objects[i].y*size)-size/2)
         shape = love.physics.newRectangleShape(size,size)
         fixture = love.physics.newFixture(body, shape)
+        fixture:setUserData("quad " .. i)
 
         table.insert(game.objects.quads, {body=body,shape=shape,fixture=fixture})
         --print("i", i, "x: ", body:getX(), " y: ", body:getY(), "width: ", objects[i].width)
     end
 
+    character.load()
+    character.body = love.physics.newBody(world, 500-20/2, 500-20/2, "dynamic")
+    character.shape = love.physics.newRectangleShape(20, 20)
+    character.fixture = love.physics.newFixture(
+                            character.body,
+                            character.shape)
+    character.fixture:setRestitution(0.0)
+    character.fixture:setUserData("char")
+    character.body:setFixedRotation(true)
+
     --Camera stuff
     camera:setBounds(0,1000,-500,-300)
-
-    --camera:setPosition(game.objects.character.body:getX(),game.objects.character.body:getY())
-    game.objects.box = {}
-    game.objects.box.body = love.physics.newBody(world, 400-20/2, 500-20/2, "dynamic")
-    game.objects.box.shape = love.physics.newRectangleShape(20, 20)
-    game.objects.box.fixture = love.physics.newFixture(
-                                        game.objects.box.body,
-                                        game.objects.box.shape)
-    game.objects.box.fixture:setRestitution(0.6)
-
 end
 
 function game.update(dt)
     world:update(dt) --this puts the world into motion
-
-    if love.keyboard.isDown("d") then
-        game.objects.character.body:applyForce(80, 0)
-        direction = 10
+    character.update(dt)
+    if string.len(text) > 500 then
+        text = ""
     end
-    if love.keyboard.isDown("a") then
-        -- m_left = 1
-        game.objects.character.body:applyForce(-100, 0)
-        direction = -10
-    end
-    if love.keyboard.isDown("w") then
-        game.objects.character.body:applyLinearImpulse(0, -30)
-    end
+--    text = character.body:getLinearVelocity()
 
      --camera movment
     screen_width = love.graphics.getWidth()
     screen_height = love.graphics.getHeight()
 
-    local charX, charY = game.objects.character.body:getPosition()
+    local charX, charY = character.body:getPosition()
     --fixed on character
     local cameraXPoint = charX-(screen_width/2)--+direction
     local cameraYPoint = charY-(screen_height/2)
@@ -128,8 +112,23 @@ function game.update(dt)
 end
 
 function game.keypressed(key)
-    -- game.objects.character:jump() -- make function in character, how would this work?
-    game.objects.character.body:applyForce(0, 0) -- *game.objects.character.preoperties.jump or something in that manner
+    character.keypressed(key)
+end
+
+function game.keyreleased(key)
+    character.keyreleased(key)
+end
+
+function beginContact(a, b, coll)
+    local x, y = coll:getNormal()
+    text = text .. "\n" .. x .. ", " .. y .. " " .. a:getUserData() .. " " .. b:getUserData()
+    if b:getUserData() == "char" and a:getBody():getY() > b:getBody():getY() then -- this requires character to be added last in game.load
+        character.body:setLinearVelocity(0, 0)
+        character.grounded = true
+    end
+end
+
+function endContact(a, b, coll)
 end
 
 function game.set_level_objects(objects)
@@ -147,22 +146,20 @@ function game.draw()
                                     game.objects.l_wall.shape:getPoints()))
     love.graphics.polygon("fill", game.objects.r_wall.body:getWorldPoints(
                                     game.objects.r_wall.shape:getPoints()))
-    love.graphics.polygon("fill", game.objects.roof.body:getWorldPoints(
-                                    game.objects.roof.shape:getPoints()))
 
-    love.graphics.setColor(193, 47, 14) --set the drawing color to red for the ball
-    love.graphics.polygon("fill", game.objects.character.body:getWorldPoints(
-                                    game.objects.character.shape:getPoints()))
-    love.graphics.setColor(193, 147, 14)
-    love.graphics.polygon("fill", game.objects.box.body:getWorldPoints(
-                                    game.objects.box.shape:getPoints()))
---    love.graphics.rectangle("fill", game.objects.character.body:getX()-10,
---                                    game.objects.character.body:getY()-10,
---                                    20, 20)
+    love.graphics.setColor(255, 255, 255)
+    character.draw()
 
     love.graphics.setColor(0,0,0)
     for i = 1,#game.objects.quads do
-        love.graphics.polygon("fill", game.objects.quads[i].body:getWorldPoints(game.objects.quads[i].shape:getPoints()))
+        love.graphics.draw(brick, game.objects.quads[i].body:getX()-size/2, game.objects.quads[i].body:getY()-size/2)
+--        love.graphics.polygon("fill", game.objects.quads[i].body:getWorldPoints(game.objects.quads[i].shape:getPoints()))
     end
+
+    love.graphics.setColor(0,0,0, 150)
+    love.graphics.rectangle("fill",0 , 0, 300, 300)
+    love.graphics.setColor(255, 255, 255)
+    love.graphics.print(text, 10, 10)
+
     camera:unset()
 end
