@@ -2,6 +2,7 @@
 character = {}
 
 function character.load()
+    character.image = love.graphics.newImage("FFII_Beaver.png")
     character.grounded = false
     character.state = "alive"
 end
@@ -23,9 +24,8 @@ function character.update(dt)
 end
 
 function character.keypressed(key)
-    if key == "j" and character.grounded == true then
-        character.body:applyLinearImpulse(0, -30) -- character.jump or something in that manner
-        character.grounded = false
+    if key == "j" then
+        character.jump()
     end
 end
 
@@ -36,11 +36,15 @@ function character.keyreleased(key)
 end
 
 function character.jump()
-
+    if character.grounded then
+        character.body:applyLinearImpulse(0, -30) -- character.jump or something in that manner
+        character.grounded = false
+    end
 end
 
 function character.draw()
-    love.graphics.setColor(193, 47, 14)
-    love.graphics.polygon("fill", character.body:getWorldPoints(
-                                    character.shape:getPoints()))
+    love.graphics.draw(character.image, character.body:getX()-10, character.body:getY()-10)
+--    love.graphics.setColor(193, 47, 14)
+--    love.graphics.polygon("fill", character.body:getWorldPoints(
+--                                    character.shape:getPoints()))
 end
