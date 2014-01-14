@@ -1,14 +1,10 @@
 -- debug = false
-require('character')
-require('createlevel')
 require('splash')
 require('game')
 
 state = "game"
 
-
 function love.load()
-    character.load()
     splash.load()
     game.load()
     love.graphics.setBackgroundColor(104, 136, 248)
@@ -33,10 +29,19 @@ function love.draw()
 end
 
 function love.keypressed(key)
+    if key == "r" then
+        love.load()
+    end
     if state == "splash" then
         splash.keypressed(key)
     end
     if state == "game" then
-        game.keypressed(game)
+        game.keypressed(key)
+    end
+end
+
+function love.keyreleased(key)
+    if state == "game" then
+        game.keyreleased(key)
     end
 end
