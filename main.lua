@@ -36,4 +36,7 @@ function love.keypressed(key)
     if state == "splash" then
         splash.keypressed(key)
     end
+    if state == "game" then
+        game.keypressed(game)
+    end
 end
