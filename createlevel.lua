@@ -1,13 +1,28 @@
 createlevel = {}
 
 function createlevel.get_objects_from_file(file)
-    objects = {}
+    level = {}
+    size = 20
     y=0
     for line in love.filesystem.lines(file) do
         for x = 0, string.len(line) do
+
+            if string.sub(line,x,x) == "S" then
+                level.charSpawnX = x*size
+                level.charSpawnY = y*size
+            end
+
+            if string.sub(line,x,x) == "X" then
+                level.width = x*size
+            end
+
+            if string.sub(line,x,x) == "Y" then
+                level.height = y*size
+            end
+
             -- don't like so many objects but can't figure it out
             if string.sub(line,x,x) == "O" then
-                table.insert(objects, {type="O",x=x,y=y})
+                table.insert(level, {object_type="O",x=x*size,y=y*size})
             end--]]
 
             --[[ i want this but iworks poorly
@@ -32,6 +47,5 @@ function createlevel.get_objects_from_file(file)
         end
         y=y+1
     end
-    print("objects: " , #objects)
-    return objects
+    return level
 end

@@ -15,39 +15,21 @@ function game.load()
     world = love.physics.newWorld(0, 9.81*64, true)
     world:setCallbacks(beginContact, endContact)
 
-    objects = createlevel.get_objects_from_file("map")
+    level = createlevel.get_objects_from_file("map")
 
     game.objects = {} -- change to world.objects = {} and npc = {}
 
     game.objects.ground = {}
-    game.objects.ground.body = love.physics.newBody(world, 2000/2, 650-50/2, "static") -- static is default, typed for clarity
-    game.objects.ground.shape = love.physics.newRectangleShape(2000, 50)
-    game.objects.ground.fixture = love.physics.newFixture(
-                                    game.objects.ground.body,
-                                    game.objects.ground.shape)
-    game.objects.ground.fixture:setUserData("ground")
-
     game.objects.l_wall = {}
-    game.objects.l_wall.body = love.physics.newBody(world, 50-50/2, 625/2, "static") -- all the /2 is because of body and shape origin
-    game.objects.l_wall.shape = love.physics.newRectangleShape(50, 625)
-    game.objects.l_wall.fixture = love.physics.newFixture(
-                                    game.objects.l_wall.body,
-                                    game.objects.l_wall.shape)
-    game.objects.l_wall.fixture:setUserData("l_wall")
-
     game.objects.r_wall = {}
-    game.objects.r_wall.body = love.physics.newBody(world, 2000-50/2, 625/2, "static")
-    game.objects.r_wall.shape = love.physics.newRectangleShape(50, 625)
-    game.objects.r_wall.fixture = love.physics.newFixture(
-                                    game.objects.r_wall.body,
-                                    game.objects.r_wall.shape)
-    game.objects.r_wall.fixture:setUserData("r_wall")
+
+    game.objects.ground, game.objects.l_wall, game.objects.r_wall = createBoarders(level.width,level.height)
 
     game.objects.quads = {}
 
-    for i = 1, #objects do
+    for i = 1, #level do
         --print("i", i, "x: ", objects[i].x, " y: ", objects[i].y, "width: ", objects[i].width)
-        body = love.physics.newBody(world, (objects[i].x*size)-size/2, (objects[i].y*size)-size/2)
+        body = love.physics.newBody(world, (level[i].x)-20/2, (level[i].y)-20/2)
         shape = love.physics.newRectangleShape(size,size)
         fixture = love.physics.newFixture(body, shape)
         fixture:setUserData("quad " .. i)
@@ -57,7 +39,7 @@ function game.load()
     end
 
     character.load()
-    character.body = love.physics.newBody(world, 500-20/2, 500-20/2, "dynamic")
+    character.body = love.physics.newBody(world, level.charSpawnX-20/2, level.charSpawnY-20/2, "dynamic")
     character.shape = love.physics.newRectangleShape(20, 20)
     character.fixture = love.physics.newFixture(
                             character.body,
@@ -67,7 +49,7 @@ function game.load()
     character.body:setFixedRotation(true)
 
     --Camera stuff
-    camera:setBounds(0,1000,-500,-300)
+    camera:setBounds(0,level.width-(love.graphics.getWidth()),0,level.height-(love.graphics.getHeight()))
 end
 
 function game.update(dt)
@@ -162,4 +144,34 @@ function game.draw()
     love.graphics.print(text, 10, 10)
 
     camera:unset()
+end
+
+function createBoarders(_width,_height)
+    local thickness = 10
+
+    ground = {}
+    ground.body = love.physics.newBody(world, _width/2, _height-thickness/2, "static") -- static is default, typed for clarity
+    ground.shape = love.physics.newRectangleShape(_width, thickness)
+    ground.fixture = love.physics.newFixture(
+    ground.body,
+    ground.shape)
+    ground.fixture:setUserData("ground")
+
+    l_wall = {}
+    l_wall.body = love.physics.newBody(world, thickness/2, _height/2, "static") -- all the /2 is because of body and shape origin
+    l_wall.shape = love.physics.newRectangleShape(thickness, _height)
+    l_wall.fixture = love.physics.newFixture(
+    l_wall.body,
+    l_wall.shape)
+    l_wall.fixture:setUserData("l_wall")
+
+    r_wall = {}
+    r_wall.body = love.physics.newBody(world, _width-thickness/2, _height/2, "static")
+    r_wall.shape = love.physics.newRectangleShape(thickness, _height)
+    r_wall.fixture = love.physics.newFixture(
+    r_wall.body,
+    r_wall.shape)
+    r_wall.fixture:setUserData("r_wall")
+
+    return ground, l_wall, r_wall
 end
