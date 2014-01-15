@@ -5,6 +5,14 @@ require('game')
 state = "game"
 
 function love.load()
+    flags = {}
+    flags.fullscreen = false
+    flags.vsync = true
+    flags.fsaa = 0
+    flags.resizable = false
+    flags.display = 1
+    flags.centered = true
+    success = love.window.setMode(600,800,flags)
     splash.load()
     game.load()
     love.graphics.setBackgroundColor(104, 136, 248)

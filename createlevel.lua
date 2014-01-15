@@ -2,47 +2,58 @@ createlevel = {}
 
 function createlevel.get_objects_from_file(file)
     level = {}
-    size = 20
+    tile_base = 20
     y=0
     for line in love.filesystem.lines(file) do
         for x = 0, string.len(line) do
 
             if string.sub(line,x,x) == "S" then
-                level.charSpawnX = x*size
-                level.charSpawnY = y*size
+                level.charSpawnX = x*tile_base
+                level.charSpawnY = y*tile_base
             end
 
             if string.sub(line,x,x) == "X" then
-                level.width = x*size
+                level.width = x*tile_base
             end
 
             if string.sub(line,x,x) == "Y" then
-                level.height = y*size
+                level.height = y*tile_base
             end
 
-            -- don't like so many objects but can't figure it out
+            --[[ don't like so many objects but can't figure it out
             if string.sub(line,x,x) == "O" then
-                table.insert(level, {object_type="O",x=x*size,y=y*size})
+                table.insert(level, {object_type="O",
+                                        x=x*tile_base,
+                                        y=y*tile_base,
+                                        width=tile_base,
+                                        height=tile_base})
             end--]]
 
-            --[[ i want this but iworks poorly
+            --i want this but iworks poorly
             if string.sub(line,x,x) == "O" then
+                --start
                 if x == 0 then
                     --start of line and object
-                    table.insert(objects,{type="O", x=x-1, y=y, width=1})
+                    table.insert(level,{type="O", x=x*tile_base, y=y*tile_base, width=1,height=tile_base})
                     width = 1
                 elseif string.sub(line,x-1,x-1) ~= string.sub(line,x,x) then
                     --start of object
-                    table.insert(objects,{type="O", x=x-1, y=y, width=1})
+                    table.insert(level,{type="O", x=x*tile_base, y=y*tile_base, width=1, height=tile_base})
                     width = 1
-                elseif string.sub(line,x,x) ~= string.sub(line,x+1,x+1) then
-                    --end of object
-                    width = width + 1
-                    objects[#objects].width = width
-                elseif string.sub(line,x,x) == string.sub(line, x+1,x+1) then
-                    --object contiues
+                end
+
+                --object contiues
+                if string.sub(line,x,x) == string.sub(line, x+1,x+1) then
                     width = width+1
                 end
+
+                --end
+                if string.sub(line,x,x) ~= string.sub(line,x+1,x+1) then
+                    --end of object
+                    width = width*tile_base
+                    level[#level].width = width
+                end
+
             end--]]
         end
         y=y+1

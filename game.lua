@@ -1,4 +1,3 @@
-
 require('createlevel')
 require('character')
 require('camera')
@@ -9,7 +8,6 @@ direction = 10
 function game.load()
     brick = love.graphics.newImage("bricks.jpg") -- store in table!!!
     text = ""
-    size = 20
     love.physics.setMeter(64)
 
     world = love.physics.newWorld(0, 9.81*64, true)
@@ -19,6 +17,7 @@ function game.load()
 
     game.objects = {} -- change to world.objects = {} and npc = {}
 
+    --boraders
     game.objects.ground = {}
     game.objects.l_wall = {}
     game.objects.r_wall = {}
@@ -29,8 +28,8 @@ function game.load()
 
     for i = 1, #level do
         --print("i", i, "x: ", objects[i].x, " y: ", objects[i].y, "width: ", objects[i].width)
-        body = love.physics.newBody(world, (level[i].x)-20/2, (level[i].y)-20/2)
-        shape = love.physics.newRectangleShape(size,size)
+        body = love.physics.newBody(world, (level[i].x)+level[i].width/2, (level[i].y)+level[i].height/2,"static")
+        shape = love.physics.newRectangleShape(level[i].width,level[i].height)
         fixture = love.physics.newFixture(body, shape)
         fixture:setUserData("quad " .. i)
 
@@ -132,10 +131,10 @@ function game.draw()
     love.graphics.setColor(255, 255, 255)
     character.draw()
 
-    love.graphics.setColor(0,0,0)
+    love.graphics.setColor(125,70,0)
     for i = 1,#game.objects.quads do
-        love.graphics.draw(brick, game.objects.quads[i].body:getX()-size/2, game.objects.quads[i].body:getY()-size/2)
---        love.graphics.polygon("fill", game.objects.quads[i].body:getWorldPoints(game.objects.quads[i].shape:getPoints()))
+        love.graphics.polygon("fill", game.objects.quads[i].body:getWorldPoints(
+                                    game.objects.quads[i].shape:getPoints()))
     end
 
     love.graphics.setColor(0,0,0, 150)
@@ -147,7 +146,7 @@ function game.draw()
 end
 
 function createBoarders(_width,_height)
-    local thickness = 10
+    local thickness = 20
 
     ground = {}
     ground.body = love.physics.newBody(world, _width/2, _height-thickness/2, "static") -- static is default, typed for clarity
