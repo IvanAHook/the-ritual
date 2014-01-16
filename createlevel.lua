@@ -20,6 +20,10 @@ function createlevel.get_objects_from_file(file)
                 level.height = y*tile_base
             end
 
+            if string.sub(line,x,x) == "B" then
+                table.insert(level,{object_type="B", x=x*tile_base,y=y*tile_base, width=tile_base,height=tile_base})
+            end
+
             --static platforms
             if string.sub(line,x,x) == "P" then
                 --start

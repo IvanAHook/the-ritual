@@ -6,7 +6,7 @@ game = {}
 direction = 10
 
 function game.load()
-    scale=0.5
+    scale=1
     brick = love.graphics.newImage("bricks.jpg") -- store in table!!!
     text = ""
     love.physics.setMeter(64)
@@ -25,16 +25,23 @@ function game.load()
 
     game.objects.ground, game.objects.l_wall, game.objects.r_wall = createBoarders(level.width,level.height)
 
-    game.objects.quads = {}
+    game.objects.entity = {}
 
     for i = 1, #level do
-        --print("i", i, "x: ", objects[i].x, " y: ", objects[i].y, "width: ", objects[i].width)
-        body = love.physics.newBody(world, (level[i].x)+level[i].width/2, (level[i].y)+level[i].height/2,"static")
-        shape = love.physics.newRectangleShape(level[i].width,level[i].height)
-        fixture = love.physics.newFixture(body, shape)
-        fixture:setUserData("quad " .. i)
-
-        table.insert(game.objects.quads, {body=body,shape=shape,fixture=fixture})
+        --platform
+        if level[i].object_type == "P" then
+            body = love.physics.newBody(world, (level[i].x)+level[i].width/2, (level[i].y)+level[i].height/2,"static")
+            shape = love.physics.newRectangleShape(level[i].width,level[i].height)
+            fixture = love.physics.newFixture(body, shape)
+            fixture:setUserData("platform" .. i)
+            table.insert(game.objects.entity, {body=body,shape=shape,fixture=fixture})
+        elseif level[i].object_type == "B" then
+            body = love.physics.newBody(world, (level[i].x)+level[i].width/2, (level[i].y)+level[i].height/2,"dynamic")
+            shape = love.physics.newRectangleShape(level[i].width,level[i].height)
+            fixture = love.physics.newFixture(body, shape)
+            fixture:setUserData("box" .. i)
+            table.insert(game.objects.entity, {body=body,shape=shape,fixture=fixture})
+        end
         --print("i", i, "x: ", body:getX(), " y: ", body:getY(), "width: ", objects[i].width)
     end
 
@@ -133,10 +140,16 @@ function game.draw()
     love.graphics.setColor(255, 255, 255)
     character.draw()
 
-    love.graphics.setColor(125,70,0)
-    for i = 1,#game.objects.quads do
-        love.graphics.polygon("fill", game.objects.quads[i].body:getWorldPoints(
-                                    game.objects.quads[i].shape:getPoints()))
+    for i = 1,#game.objects.entity do
+        if string.sub(game.objects.entity[i].fixture:getUserData(),1, 8) == "platform" then
+            love.graphics.setColor(84, 84, 84)
+        elseif string.sub(game.objects.entity[i].fixture:getUserData(),1, 3) == "box" then
+            love.graphics.setColor(205,149,12)
+        else
+            love.graphicd.setColor(0,0,0)
+        end
+        love.graphics.polygon("fill", game.objects.entity[i].body:getWorldPoints(
+                                        game.objects.entity[i].shape:getPoints()))
     end
 
     love.graphics.setColor(0,0,0, 150)

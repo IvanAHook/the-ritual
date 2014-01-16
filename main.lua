@@ -10,7 +10,7 @@ function love.load()
     flags.vsync = true
     flags.fsaa = 0
     flags.resizable = false
-    flags.display = 1
+    flags.display = 2
     flags.centered = true
     love.window.setTitle("TheRitual")
     success = love.window.setMode(800,600,flags)
