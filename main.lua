@@ -12,7 +12,8 @@ function love.load()
     flags.resizable = false
     flags.display = 1
     flags.centered = true
-    success = love.window.setMode(600,800,flags)
+    love.window.setTitle("TheRitual")
+    success = love.window.setMode(800,600,flags)
     splash.load()
     game.load()
     love.graphics.setBackgroundColor(104, 136, 248)

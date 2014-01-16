@@ -20,25 +20,16 @@ function createlevel.get_objects_from_file(file)
                 level.height = y*tile_base
             end
 
-            --[[ don't like so many objects but can't figure it out
-            if string.sub(line,x,x) == "O" then
-                table.insert(level, {object_type="O",
-                                        x=x*tile_base,
-                                        y=y*tile_base,
-                                        width=tile_base,
-                                        height=tile_base})
-            end--]]
-
-            --i want this but iworks poorly
-            if string.sub(line,x,x) == "O" then
+            --static platforms
+            if string.sub(line,x,x) == "P" then
                 --start
                 if x == 0 then
                     --start of line and object
-                    table.insert(level,{type="O", x=x*tile_base, y=y*tile_base, width=1,height=tile_base})
+                    table.insert(level,{object_type="P", x=x*tile_base, y=y*tile_base, width=1,height=tile_base})
                     width = 1
                 elseif string.sub(line,x-1,x-1) ~= string.sub(line,x,x) then
                     --start of object
-                    table.insert(level,{type="O", x=x*tile_base, y=y*tile_base, width=1, height=tile_base})
+                    table.insert(level,{object_type="P", x=x*tile_base, y=y*tile_base, width=1, height=tile_base})
                     width = 1
                 end
 
@@ -54,7 +45,7 @@ function createlevel.get_objects_from_file(file)
                     level[#level].width = width
                 end
 
-            end--]]
+            end
         end
         y=y+1
     end

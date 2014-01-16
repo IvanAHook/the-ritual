@@ -6,6 +6,7 @@ game = {}
 direction = 10
 
 function game.load()
+    scale=0.5
     brick = love.graphics.newImage("bricks.jpg") -- store in table!!!
     text = ""
     love.physics.setMeter(64)
@@ -48,7 +49,8 @@ function game.load()
     character.body:setFixedRotation(true)
 
     --Camera stuff
-    camera:setBounds(0,level.width-(love.graphics.getWidth()),0,level.height-(love.graphics.getHeight()))
+    camera:scale(scale)
+    camera:setBounds(0,level.width-(love.graphics.getWidth()*scale),0,level.height-(love.graphics.getHeight()*scale))
 end
 
 function game.update(dt)
@@ -65,8 +67,8 @@ function game.update(dt)
 
     local charX, charY = character.body:getPosition()
     --fixed on character
-    local cameraXPoint = charX-(screen_width/2)--+direction
-    local cameraYPoint = charY-(screen_height/2)
+    local cameraXPoint = charX-((screen_width/2)*scale)--+direction
+    local cameraYPoint = charY-((screen_height/2)*scale)
     camera:setPosition(cameraXPoint, cameraYPoint)
     --]]
 
