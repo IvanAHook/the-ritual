@@ -1,6 +1,4 @@
-require('createlevel')
-require('character')
-require('camera')
+require 'character'
 game = {}
 
 direction = 10
@@ -45,15 +43,7 @@ function game.load()
         --print("i", i, "x: ", body:getX(), " y: ", body:getY(), "width: ", objects[i].width)
     end
 
-    character.load()
-    character.body = love.physics.newBody(world, level.charSpawnX-20/2, level.charSpawnY-20/2, "dynamic")
-    character.shape = love.physics.newRectangleShape(20, 20)
-    character.fixture = love.physics.newFixture(
-                            character.body,
-                            character.shape)
-    character.fixture:setRestitution(0.0)
-    character.fixture:setUserData("char")
-    character.body:setFixedRotation(true)
+    player = character:new(world, level.charSpawnX-20/2, level.charSpawnY-20/2, "dynamic", "player")
 
     --Camera stuff
     camera:scale(scale)
@@ -62,18 +52,18 @@ end
 
 function game.update(dt)
     world:update(dt) --this puts the world into motion
-    character.update(dt)
+    player:update(dt)
     if string.len(text) > 500 then
         text = ""
     end
---    text = character.body:getLinearVelocity()
+--    text = player.body:getLinearVelocity()
 
      --camera movment
     screen_width = love.graphics.getWidth()
     screen_height = love.graphics.getHeight()
 
-    local charX, charY = character.body:getPosition()
-    --fixed on character
+    local charX, charY = player.body:getPosition()
+    --fixed on player
     local cameraXPoint = charX-((screen_width/2)*scale)--+direction
     local cameraYPoint = charY-((screen_height/2)*scale)
     camera:setPosition(cameraXPoint, cameraYPoint)
@@ -96,25 +86,25 @@ function game.update(dt)
     --]]
 
 --    if love.keyboard.isDown("w") then -- keypress rather than isDown for this.
---        game.objects.character.body:applyForce(0, -500)
+--        game.objects.player.body:applyForce(0, -500)
 --    end
-    -- game.objects.character.body:setPosition(x + (m_right - m_left)*150*dt, y)
+    -- game.objects.player.body:setPosition(x + (m_right - m_left)*150*dt, y)
 end
 
 function game.keypressed(key)
-    character.keypressed(key)
+    player:keypressed(key)
 end
 
 function game.keyreleased(key)
-    character.keyreleased(key)
+    player:keyreleased(key)
 end
 
 function beginContact(a, b, coll)
     local x, y = coll:getNormal()
-    text = text .. "\n" .. x .. ", " .. y .. " " .. a:getUserData() .. " " .. b:getUserData()
-    if b:getUserData() == "char" and a:getBody():getY() > b:getBody():getY() then -- this requires character to be added last in game.load
-        character.body:setLinearVelocity(0, 0)
-        character.grounded = true
+    if b:getUserData() == player.fixture:getUserData() and a:getBody():getY() > b:getBody():getY() then -- this requires player to be added last in game.load
+        player.body:setLinearVelocity(0, 0)
+        player.grounded = true
+        text = text .. "\n" .. x .. ", " .. y .. " " .. a:getUserData() .. " " .. b:getUserData()
     end
 end
 
@@ -138,7 +128,7 @@ function game.draw()
                                     game.objects.r_wall.shape:getPoints()))
 
     love.graphics.setColor(255, 255, 255)
-    character.draw()
+    player:draw()
 
     for i = 1,#game.objects.entity do
         if string.sub(game.objects.entity[i].fixture:getUserData(),1, 8) == "platform" then

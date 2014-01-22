@@ -1,6 +1,9 @@
 -- debug = false
-require('splash')
-require('game')
+require 'class'
+require 'splash'
+require 'game'
+require 'createlevel'
+require 'camera'
 
 state = "game"
 
