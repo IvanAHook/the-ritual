@@ -1,5 +1,6 @@
 require('createlevel')
 require('simple_platform')
+require'box'
 level = {}
 
 function level.buildLevel(world)
@@ -20,18 +21,15 @@ function level.buildLevel(world)
         local object = {}
         if current_level[i].object_type == "P" then
             object = simple_platform:new()
-            object.id = i
-            object:load()
             object:spawn(world,current_level[i].x,current_level[i].y
                         ,current_level[i].width,current_level[i].height,"static")
             table.insert(objects, object)
 
-        --[[elseif level[i].object_type == "B" then
-            body = love.physics.newBody(world, (level[i].x)+level[i].width/2, (level[i].y)+level[i].height/2,"dynamic")
-            shape = love.physics.newRectangleShape(level[i].width,level[i].height)
-            fixture = love.physics.newFixture(body, shape)
-            fixture:setUserData("box" .. i)
-            table.insert(game.objects.entity, {body=body,shape=shape,fixture=fixture})--]]
+        elseif level[i].object_type == "B" then
+            object = box:new()
+            object:spawn(world,current_level[i].x,current_level[i].y
+                        ,current_level[i].width,current_level[i].height,"dynamic")
+            table.insert(objects, object)
         end
     end
 

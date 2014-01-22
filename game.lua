@@ -1,10 +1,7 @@
-<<<<<<< HEAD
-require 'character'
-=======
+
 require('character')
 require('camera')
 require('level')
->>>>>>> matakea
 game = {}
 
 t = 0

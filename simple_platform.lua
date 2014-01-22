@@ -1,22 +1,9 @@
-require('Platform')
-require'Class'
+require'Platform'
 
-simple_platform = class(Platform)
-simple_platform_mt = {__index = simple_platform}
+simple_platform = Platform:new()
 
-function simple_platform:new()
-    local new_inst = {}
-    setmetatable(new_inst, simple_platform_mt )
-    return new_inst
-end
-
-function simple_platform:load()
-    self.red = 30
-    self.green = 30
-    self.blue = 30
-end
-
-function simple_platform:draw()
-    love.graphics.setColor(self.red, self.green, self.blue )
-    Platform:draw()
+function simple_platform:init()
+    self.red = 255
+    self.green = 0
+    self.blue = 0
 end
