@@ -1,7 +1,5 @@
 require 'unit'
 require 'character'
-require 'camera'
-require 'level'
 
 game = {}
 

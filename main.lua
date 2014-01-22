@@ -4,6 +4,7 @@ require 'splash'
 require 'game'
 require 'createlevel'
 require 'camera'
+require 'level'
 
 state = "game"
 
