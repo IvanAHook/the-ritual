@@ -1,7 +1,8 @@
+require 'unit'
+require 'character'
+require 'camera'
+require 'level'
 
-require('character')
-require('camera')
-require('level')
 game = {}
 
 t = 0
@@ -18,7 +19,8 @@ function game.load()
     game.objects = {}
     game.objects = level.buildLevel(world)
 
-    player = character:new(world, 10-20/2, 10-20/2, "dynamic", "player")
+    player = character:new()
+    player:spawn(world, level.charSpawnX-20/2, level.charSpawnY-20/2, "dynamic", "player")
 
     --Camera stuff
     camera:scale(scale)
@@ -85,12 +87,9 @@ function game.keyreleased(key)
 end
 
 function beginContact(a, b, coll)
+    player:beginContact(a, b, coll)
     local x, y = coll:getNormal()
-    if b:getUserData() == player.fixture:getUserData() and a:getBody():getY() > b:getBody():getY() then -- this requires player to be added last in game.load
-        player.body:setLinearVelocity(0, 0)
-        player.grounded = true
-        text = text .. "\n" .. x .. ", " .. y .. " " .. a:getUserData() .. " " .. b:getUserData()
-    end
+    text = text .. "\n" .. a:getUserData() .. " " .. b:getUserData()
 end
 
 function endContact(a, b, coll)
@@ -115,9 +114,9 @@ function game.draw()
     player:draw()
 
     love.graphics.setColor(0,0,0, 150)
-    love.graphics.rectangle("fill",0 , 0, 300, 300)
+    love.graphics.rectangle("fill",camera.x , camera.y, 300, 300)
     love.graphics.setColor(255, 255, 255)
-    love.graphics.print(text, 10, 10)
+    love.graphics.print(text, camera.x, camera.y)
 
     camera:unset()
 end

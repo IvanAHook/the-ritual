@@ -1,19 +1,9 @@
-character = class:new()
+character = unit:new(...)
 
-function character:init(world, x, y, object_type, userdata)
-    self.x = x
-    self.y = y
+function character:init()
     self.image = love.graphics.newImage("FFII_Beaver.png")
     self.grounded = false
     self.state = "idle"
-    self.body = love.physics.newBody(world, level.charSpawnX-20/2, level.charSpawnY-20/2, "dynamic")
-    self.shape = love.physics.newRectangleShape(20, 20)
-    self.fixture = love.physics.newFixture(
-                            self.body,
-                            self.shape)
-    self.fixture:setRestitution(0.0)
-    self.fixture:setUserData(userdata)
-    self.body:setFixedRotation(true)
 end
 
 function character:update(dt)
@@ -47,9 +37,19 @@ function character:keyreleased(key)
     end
 end
 
+function character:beginContact(a, b, coll)
+    local x, y = coll:getNormal()
+    if b == self.fixture then -- this requires self to be added last in game.load
+        if a:getBody():getY() > b:getBody():getY() then
+            self.body:setLinearVelocity(0, 0)
+            self.grounded = true
+        end
+    end
+end
+
 function character:draw()
-    love.graphics.draw(self.image, self.body:getX()-10, self.body:getY()-10)
+     love.graphics.draw(self.image, self.body:getX()-10, self.body:getY()-10)
 --    love.graphics.setColor(193, 47, 14)
---    love.graphics.polygon("fill", character.body:getWorldPoints(
---                                    character.shape:getPoints()))
+--    love.graphics.polygon("fill", self.body:getWorldPoints(
+--                                    self.shape:getPoints()))
 end
