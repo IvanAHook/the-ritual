@@ -39,8 +39,6 @@ function game.update(dt)
     if string.len(text) > 500 then
         text = ""
     end
---    text = player.body:getLinearVelocity()
-
      --camera movment
     screen_width = love.graphics.getWidth()
     screen_height = love.graphics.getHeight()

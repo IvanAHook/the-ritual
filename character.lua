@@ -2,8 +2,10 @@ character = unit:new(...)
 
 function character:init()
     self.image = love.graphics.newImage("FFII_Beaver.png")
+    self.maxspeed = 200
     self.grounded = false
     self.state = "idle"
+    self.direction = 0
 end
 
 function character:update(dt)
@@ -14,12 +16,14 @@ function character:update(dt)
     if love.keyboard.isDown("a") then
         self.body:applyForce(-100, 0)
     end
-    if velX > 200 then
-        self.body:setLinearVelocity(200, velY)
+    if velX > self.maxspeed then
+        self.body:setLinearVelocity(self.maxspeed, velY)
     end
-    if velX < -200 then
-        self.body:setLinearVelocity(-200, velY)
+    if velX < -self.maxspeed then
+        self.body:setLinearVelocity(-self.maxspeed, velY)
     end
+    self.movekeydown = false
+    self.direction = unit:getDirection()
 end
 
 function character:keypressed(key)
@@ -32,8 +36,8 @@ function character:keypressed(key)
 end
 
 function character:keyreleased(key)
-   if (key == "a" or  key == "d") and self.grounded == true then
-         self.body:setLinearVelocity(0, 0)
+    if (key == "a" or  key == "d") and self.grounded == true then
+        self.body:setLinearVelocity(0, 0)
     end
 end
 
@@ -41,8 +45,8 @@ function character:beginContact(a, b, coll)
     local x, y = coll:getNormal()
     if b == self.fixture then -- this requires self to be added last in game.load
         if a:getBody():getY() > b:getBody():getY() then
-            self.body:setLinearVelocity(0, 0)
             self.grounded = true
+            self.body:setLinearVelocity(0, 0) -- fix stoping when landing
         end
     end
 end
