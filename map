@@ -1,16 +1,16 @@
                                                                                 X
-
-PPPP                        PP                                                 P
-    PPPP
-    PP  PPPP                        B
-        P   PPPP       B            B
-                PPPP   S            B
-                    PPPP            B
-                        PPPP        B
-                            PPPP    BPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-                            PPP P   B
-                            PP   P  B
-                            P     P B
+                  rp
+PPPP              rmp           PP                                                 P
+    PPPPr
+    PP  PPPP p                         B
+        P   PPPP r      B
+                PPPP   S
+                    PPPP rp
+r                       PPPP            rmmmp  rp            P   P
+rp                          PPPP     PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+rmp                         PPP P
+rmmp                        PP   P  B
+rmmmp                             P     P B
                                    PB
                                     P
                                      P
@@ -29,9 +29,11 @@ PPPP                        PP                                                 P
                                                   P                           P
                                                    P                           P
                                                     P
-                B                                    P
-               BBB
-              BBBBB
-             BBBBBBB
-            BBBBBBBBB
+ r         p     
+ rp       pr
+ rmp     pmr
+ rmmp   pmmr
+ rmmmp pmmmr               PPPPPrmmmp
+ rp                             PPPPPrmmmp                    
+ pr                                  PPPPPrmmmp
 Y

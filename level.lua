@@ -2,6 +2,7 @@ require('createlevel')
 require('simple_platform')
 require'box'
 require'boarder'
+require'ramp'
 level = {}
 
 function level.buildLevel(world)
@@ -22,16 +23,16 @@ function level.buildLevel(world)
         local thickness = 20
         if i == 1 then
             --roof
-            object:spawn(world, 0, 0, level.width, thickness, "static")
+            object:spawn(world, 0, 0, level.width, thickness, "static","roof")
         elseif i == 2 then
             --ground
-            object:spawn(world, 0, level.height, level.width, thickness, "static")
+            object:spawn(world, 0, level.height, level.width, thickness, "static","ground")
         elseif i == 3 then
             --left_wall
-            object:spawn(world, 0, 0, thickness, level.height, "static")
+            object:spawn(world, 0, 0, thickness, level.height, "static","left_wall")
         elseif i == 4 then
             ---right_wall
-            object:spawn(world, level.width, 0, thickness, level.height+thickness, "static")
+            object:spawn(world, level.width, 0, thickness, level.height+thickness, "static","right_wall")
         end
         table.insert(objects, object)
     end
@@ -41,13 +42,23 @@ function level.buildLevel(world)
         if current_level[i].object_type == "P" then
             object = simple_platform:new()
             object:spawn(world,current_level[i].x,current_level[i].y
-                        ,current_level[i].width,current_level[i].height,"static")
+                        ,current_level[i].width,current_level[i].height,"static", "simple_platform")
             table.insert(objects, object)
 
         elseif level[i].object_type == "B" then
             object = box:new()
             object:spawn(world,current_level[i].x,current_level[i].y
-                        ,current_level[i].width,current_level[i].height,"dynamic")
+                        ,current_level[i].width,current_level[i].height,"dynamic","box")
+            table.insert(objects, object)
+        elseif level[i].object_type == "r" then
+            object = ramp:new()
+            object:spawn(world,current_level[i].x,current_level[i].y
+                        ,current_level[i].width,current_level[i].height,"static","ramp", true)
+            table.insert(objects, object)
+        elseif level[i].object_type == "p" then
+            object = ramp:new()
+            object:spawn(world,current_level[i].x,current_level[i].y
+                        ,current_level[i].width,current_level[i].height,"static","ramp", false)
             table.insert(objects, object)
         end
     end
