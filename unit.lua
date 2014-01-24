@@ -7,7 +7,7 @@ end
 
 function unit:spawn(world, x, y, object_type, userdata)
     self.body = love.physics.newBody(world, x, y, object_type)
-    self.shape = love.physics.newRectangleShape(32, 52)
+    self.shape = love.physics.newRectangleShape(28, 46)
     self.fixture = love.physics.newFixture(self.body, self.shape)
     self.fixture:setRestitution(0.0)
     self.fixture:setUserData(userdata)
@@ -33,20 +33,19 @@ function unit:getDirection() -- not working
 end
 
 function unit:compute_animation(animation, state, dt)
-    if (self.anim_dt - dt) > 0.2 and state == "moving" then
+    if (self.anim_dt - dt) > 0.1 and state == "moving" then
         self.frame = self.frame + 1
         self.anim_dt = 0
         if self.frame > #animation then
             self.frame = 1
         end
-    else if state == "idle" then
+    elseif state == "idle" then
         self.frame = 1
-    end
     end
     self.anim_dt = self.anim_dt + dt
     return self.frame
 end
 
 function unit:draw_unit(image, animation)
-    love.graphics.draw(image, animation[self.frame], self.body:getX()-32, self.body:getY()-32-1)
+    love.graphics.draw(image, animation[self.frame], self.body:getX()-32, self.body:getY()-32-4)
 end
