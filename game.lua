@@ -40,8 +40,8 @@ function game.update(dt)
         text = ""
     end
      --camera movment
-    screen_width = love.graphics.getWidth()
-    screen_height = love.graphics.getHeight()
+    local screen_width = love.graphics.getWidth()
+    local screen_height = love.graphics.getHeight()
 
     local charX, charY = player.body:getPosition()
     --fixed on player

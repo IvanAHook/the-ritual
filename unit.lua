@@ -1,8 +1,13 @@
 unit = class:new()
 
+function unit:init()
+    self.frame = 1
+    self.anim_dt = 0
+end
+
 function unit:spawn(world, x, y, object_type, userdata)
     self.body = love.physics.newBody(world, x, y, object_type)
-    self.shape = love.physics.newRectangleShape(20, 20)
+    self.shape = love.physics.newRectangleShape(32, 52)
     self.fixture = love.physics.newFixture(self.body, self.shape)
     self.fixture:setRestitution(0.0)
     self.fixture:setUserData(userdata)
@@ -17,19 +22,31 @@ function unit:getDirection() -- not working
         local direction
         if x > self.lastx then
             direction = 1
-            print(1)
         elseif x < self.lastx then
             direction = -1
-            print(2)
         elseif x == self.lastx then
             direction = 0
-            print(3)
         end
         self.lastx, self.lasty = x, y
         return direction
     end
 end
 
-function unit:draw()
-    love.graphics.draw(self.image, self.body:getX()-10, self.body:getY()-10)
+function unit:compute_animation(animation, state, dt)
+    if (self.anim_dt - dt) > 0.2 and state == "moving" then
+        self.frame = self.frame + 1
+        self.anim_dt = 0
+        if self.frame > #animation then
+            self.frame = 1
+        end
+    else if state == "idle" then
+        self.frame = 1
+    end
+    end
+    self.anim_dt = self.anim_dt + dt
+    return self.frame
+end
+
+function unit:draw_unit(image, animation)
+    love.graphics.draw(image, animation[self.frame], self.body:getX()-32, self.body:getY()-32-1)
 end
