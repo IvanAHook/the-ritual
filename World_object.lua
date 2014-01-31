@@ -6,6 +6,7 @@ function World_object:spawn(world,x,y,width,height,body_type,userdata)
     self.shape = love.physics.newRectangleShape(width,height)
     self.fixture = love.physics.newFixture(self.body,self.shape)
     self.fixture:setUserData(userdata)
+    self.fixture:setRestitution(0.0)
     print(self.body:getX(), self.body:getY())
 end
 

@@ -33,7 +33,7 @@ function unit:getDirection() -- not working
 end
 
 function unit:compute_animation(animation, state, dt)
-    if (self.anim_dt - dt) > 0.1 and state == "moving" then
+    if (self.anim_dt - dt) > 0.05 and state == "moving" then
         self.frame = self.frame + 1
         self.anim_dt = 0
         if self.frame > #animation then

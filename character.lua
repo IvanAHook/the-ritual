@@ -5,7 +5,7 @@ function character:init()
     self.controls_enabled = true
     self.width = 64
     self.height = 64
-    self.anim = {}
+    self.anim = {} -- crate load animation class
     self.anim.walk_r = {love.graphics.newQuad( 0, 705, self.width, self.height, 832, 1344 ),
                         love.graphics.newQuad( 64, 705, self.width, self.height, 832, 1344 ),
                         love.graphics.newQuad( 128, 705, self.width, self.height, 832, 1344 ),
@@ -27,7 +27,8 @@ function character:init()
 
     self.curranim = self.anim.walk_r
 
-    self.maxspeed = 200
+    self.walkspeed = 200
+    self.runspeed = 400
     self.grounded = false
     self.state = "idle"
     self.direction = 0
@@ -83,11 +84,16 @@ end
 
 function character:limit_velocity()
     local velX, velY = self.body:getLinearVelocity()
-    if velX > self.maxspeed then
-        self.body:setLinearVelocity(self.maxspeed, velY)
+    if love.keyboard.isDown("lshift") then
+        speed = self.runspeed
+    else
+        speed = self.walkspeed
     end
-    if velX < -self.maxspeed then
-        self.body:setLinearVelocity(-self.maxspeed, velY)
+    if velX > speed then
+        self.body:setLinearVelocity(speed, velY)
+    end
+    if velX < -speed then
+        self.body:setLinearVelocity(-speed, velY)
     end
 end
 
