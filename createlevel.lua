@@ -28,7 +28,6 @@ function createlevel.get_objects_from_file(file)
             --ramp
             if string.sub(line,x,x) == "r" or string.sub(line,x,x) == "p" or string.sub(line,x,x) == "m" then
                 --start of line and object
-                print(string.sub(line,x,x))
                 if (string.sub(line,x,x) == "r" or string.sub(line,x,x) == "p")
                     and string.sub(line,x-1,x-1) ~= "r" and string.sub(line,x-1,x-1) ~= "p"
                     and string.sub(line,x-1,x-1) ~= "m" then
@@ -40,7 +39,6 @@ function createlevel.get_objects_from_file(file)
                     and string.sub(line,x+1,x+1) ~= "p"
                     and string.sub(line,x+1,x+1) ~= "m"
                     then
-                        print("90")
                         width = width*tile_base
                         level[#level].width = width
                     end--]]
@@ -54,7 +52,6 @@ function createlevel.get_objects_from_file(file)
                 or string.sub(line,x,x) == "p" and string.sub(line,x-1,x-1) == "m" -- rmp
                 or string.sub(line,x,x) == "r" and string.sub(line,x-1,x-1) == "p" -- pr
                 or string.sub(line,x,x) == "r" and string.sub(line,x-1,x-1) == "m" then -- pmr
-                    print("end")
                     width = width+1
                     width = width*tile_base
                     level[#level].width = width

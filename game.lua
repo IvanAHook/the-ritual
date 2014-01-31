@@ -6,6 +6,7 @@ game = {}
 t = 0
 
 function game.load()
+    buf = 0
     scale=1
     brick = love.graphics.newImage("bricks.jpg") -- store in table!!!
     text = ""
@@ -22,15 +23,7 @@ function game.load()
 
     --Camera stuff
     camera:scale(scale)
-    --camera:setBounds(0,level.width-(love.graphics.getWidth()*scale),0,level.height-(love.graphics.getHeight()*scale))
-
-    effect = love.graphics.newShader [[
-        extern number time;
-        vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 pixel_coords)
-        {
-            return vec4((1.0+sin(time))/2.0, abs(cos(time)), abs(sin(time)), 1.0);
-        }
-    ]]
+    camera:setBounds(0,level.width-(love.graphics.getWidth()*scale)+20,0,level.height-(love.graphics.getHeight()*scale)+20)
 end
 
 function game.update(dt)
@@ -45,33 +38,10 @@ function game.update(dt)
 
     local charX, charY = player.body:getPosition()
     --fixed on player
-    local cameraXPoint = charX-((screen_width/2)*scale)--+direction
+    
+    local cameraXPoint = charX-((screen_width/2)*scale)+player.look*50
     local cameraYPoint = charY-((screen_height/2)*scale)
-    camera:setPosition(cameraXPoint, cameraYPoint)
-    --]]
-
-    --[[ some nicer camera movement I dident get right :)
-    local cameraEndX = camera.x+(screen_width/2)+direction
-    local cameraEndY = camera.y+(screen_height/2)
-    if charX < cameraEndX then
-        camera:move(-1,0)
-    elseif charX > cameraEndX then
-        camera:move(1,0)
-    end
-
-    if charY < cameraEndY then
-        camera:move(0,-1)
-    elseif charY > cameraEndY then
-        camera:move(0,1)
-    end
-    --]]
-
---    if love.keyboard.isDown("w") then -- keypress rather than isDown for this.
---        game.objects.player.body:applyForce(0, -500)
---    end
-    -- game.objects.character.body:setPosition(x + (m_right - m_left)*150*dt, y)
-    t = t + dt
-    effect:send("time",t)
+    camera:setPositionWithCerp(cameraXPoint, cameraYPoint)
 end
 
 function game.keypressed(key)
@@ -98,10 +68,8 @@ end
 function game.draw()
     camera:set()
     love.graphics.setColor(0,31,90)
-    --print(game.objects[3].id)
 
     for i = 1, #game.objects do
-        --print(game.objects[i].id)
         game.objects[i]:draw()
         i=i-1
     end
