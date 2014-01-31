@@ -50,6 +50,12 @@ function character:update(dt)
     self.frame = self:compute_animation(self.curranim, self.state, dt)
     self.direction = self:getDirection() -- solve this so that it does not need to be called here...
     self.state = "idle"
+
+    if self.curranim == self.anim.walk_l then
+        self.look = -1
+    else
+        self.look = 1
+    end
 end
 
 function character:keypressed(key)

@@ -31,6 +31,11 @@ function camera:scale(sx, sy)
     self.scaleY = self.scaleY * (sy or sx)
 end
 
+function camera:setPositionWithCerp(x,y)
+    camera:setX(cerp(x,self.x,0.8))
+    camera:setY(y)
+end
+
 function camera:setPosition(x,y)
     camera:setX(x)
     camera:setY(y)
@@ -56,3 +61,5 @@ function clamp(n, min, max)
 
     return n < min and min or (n > max and max or n)
 end
+
+function cerp(a,b,t) local f=(1-math.cos(t*math.pi))*.5 return a*(1-f)+b*f end
