@@ -7,7 +7,7 @@ end
 
 function unit:spawn(world, x, y, object_type, userdata)
     self.body = love.physics.newBody(world, x, y, object_type)
-    self.shape = love.physics.newRectangleShape(28, 46)
+    self.shape = love.physics.newRectangleShape(24, 46)
     self.fixture = love.physics.newFixture(self.body, self.shape)
     self.fixture:setRestitution(0.0)
     self.fixture:setUserData(userdata)
@@ -47,5 +47,5 @@ function unit:compute_animation(animation, state, dt)
 end
 
 function unit:draw_unit(image, animation)
-    love.graphics.draw(image, animation[self.frame], self.body:getX()-32, self.body:getY()-32-4)
+    love.graphics.draw(image, animation[self.frame], self.body:getX()-32, self.body:getY()-32)
 end

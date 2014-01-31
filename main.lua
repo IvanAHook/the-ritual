@@ -5,6 +5,7 @@ require 'game'
 require 'createlevel'
 require 'camera'
 require 'level'
+require 'animation_loader'
 
 state = "game"
 
