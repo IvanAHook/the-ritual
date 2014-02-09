@@ -23,22 +23,20 @@ function game.load()
     player:spawn(world, level.charSpawnX-20/2, level.charSpawnY-20/2, "dynamic", "player")
 
     --Camera stuff
-    camera:scale(scale)
-    --add textbox
-    camera:newLayer(1, function ()
+    camera:newLayer(1, function()
+
+        --add textbox
         love.graphics.setColor(0,0,0, 150)
         love.graphics.rectangle("fill",camera.x , camera.y, 300, 300)
         love.graphics.setColor(255, 255, 255)
         love.graphics.print(text, camera.x, camera.y)
-    end)
-    --add world objects to layer
-    camera:newLayer(1, function()
+
+        --add world objects to layer
         for _, object in ipairs(game.objects) do
             object:draw()
         end
-    end)
-    --add player to layer
-    camera:newLayer(1,function()
+
+        --add player to layer
         love.graphics.setColor(255, 255, 255)
         player:draw()
     end)
@@ -62,7 +60,7 @@ function game.update(dt)
 
     local charX, charY = player.body:getPosition()
     --fixed on player
-    local cameraXPoint = charX-((screen_width/2)*scale)+player.look*50
+    local cameraXPoint = charX-((screen_width/2)*scale)+player.look*100
     local cameraYPoint = charY-((screen_height/2)*scale)
     camera:setPositionWithCerp(cameraXPoint, cameraYPoint)
 end
