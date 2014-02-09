@@ -9,6 +9,7 @@ function game.load()
     buf = 0
     scale=1
     brick = love.graphics.newImage("bricks.jpg") -- store in table!!!
+    scene = love.graphics.newImage("scene.jpg")
     text = ""
     love.physics.setMeter(64)
 
@@ -23,6 +24,29 @@ function game.load()
 
     --Camera stuff
     camera:scale(scale)
+    --add textbox
+    camera:newLayer(1, function ()
+        love.graphics.setColor(0,0,0, 150)
+        love.graphics.rectangle("fill",camera.x , camera.y, 300, 300)
+        love.graphics.setColor(255, 255, 255)
+        love.graphics.print(text, camera.x, camera.y)
+    end)
+    --add world objects to layer
+    camera:newLayer(1, function()
+        for _, object in ipairs(game.objects) do
+            object:draw()
+        end
+    end)
+    --add player to layer
+    camera:newLayer(1,function()
+        love.graphics.setColor(255, 255, 255)
+        player:draw()
+    end)
+    --add background
+    camera:newLayer(0.5, function()
+        love.graphics.setColor(255,255,255)
+        love.graphics.draw(scene, 0, 0)
+    end)
     camera:setBounds(0,level.width-(love.graphics.getWidth()*scale)+20,0,level.height-(love.graphics.getHeight()*scale)+20)
 end
 
@@ -65,21 +89,5 @@ function game.set_level_objects(objects)
 end
 
 function game.draw()
-    camera:set()
-    love.graphics.setColor(0,31,90)
-
-    for i = 1, #game.objects do
-        game.objects[i]:draw()
-        i=i-1
-    end
-
-    love.graphics.setColor(255, 255, 255)
-    player:draw()
-
-    love.graphics.setColor(0,0,0, 150)
-    love.graphics.rectangle("fill",camera.x , camera.y, 300, 300)
-    love.graphics.setColor(255, 255, 255)
-    love.graphics.print(text, camera.x, camera.y)
-
-    camera:unset()
+    camera:draw()
 end
