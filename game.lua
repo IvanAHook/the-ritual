@@ -38,8 +38,7 @@ function game.update(dt)
 
     local charX, charY = player.body:getPosition()
     --fixed on player
-    
-    local cameraXPoint = charX-((screen_width/2)*scale)+player.look*50
+    local cameraXPoint = charX-((screen_width/2)*scale)+player.look*100
     local cameraYPoint = charY-((screen_height/2)*scale)
     camera:setPositionWithCerp(cameraXPoint, cameraYPoint)
 end

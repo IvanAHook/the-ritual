@@ -34,7 +34,7 @@ function character:update(dt)
     if self.direction ~= self:getDirection() then self.direction = self:getDirection() end -- solve this so that it does not need to be called here...
     self.state = "idle"
 
-    if self.curranim == self.anim.walk_l then
+    if self.curranim == self.anim["walkl"] then
         self.look = -1
     else
         self.look = 1
