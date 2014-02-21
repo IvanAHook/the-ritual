@@ -21,7 +21,6 @@ function game.load()
 
     player = character:new()
     player:spawn(world, level.charSpawnX-20/2, level.charSpawnY-20/2, "dynamic", "player")
-
     --Camera stuff
     camera:newLayer(1, function()
 

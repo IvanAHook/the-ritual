@@ -33,7 +33,7 @@ function camera:scale(sx, sy)
 end
 
 function camera:setPositionWithCerp(x,y)
-    camera:setX(cerp(x,self.x,0.8))
+    camera:setX(cerp(x,self.x,0.9))
     camera:setY(y)
 end
 
