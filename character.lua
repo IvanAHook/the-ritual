@@ -21,18 +21,18 @@ function character:update(dt)
     if self.controls_enabled then
         if love.keyboard.isDown("d") then -- how do i handle movement in a neat way that also feels good?
             if self.form == "human" then
-                self.body:applyForce(400,0)
+                self:moveRight(400)
             elseif self.form ==  "ghost" then
-                self.body:applyForce(100,0)
+                self:moveRight(100)
             end
             self.curranim = self.anim['walkr']
             self.state = "moving"
         end
         if love.keyboard.isDown("a") then
             if self.form == "human" then
-                self.body:applyForce(-400,0)
+                self:moveLeft(400)
             elseif self.form ==  "ghost" then
-                self.body:applyForce(-100,0)
+                self:moveLeft(100)
             end
             self.curranim = self.anim['walkl']
             self.state = "moving"
@@ -40,14 +40,17 @@ function character:update(dt)
         if love.keyboard.isDown("w") then
             if self.form == "human" then
             elseif self.form ==  "ghost" then
-                self.body:applyForce(0,-100)
+                self:moveUp(100)
             end
         end
         if love.keyboard.isDown("s") then
             if self.form == "human" then
             elseif self.form ==  "ghost" then
-                self.body:applyForce(0,100)
+                self:moveDown(100)
             end
+        end
+        if love.keyboard.isDown("p") then
+            self:death()
         end
     end
     self:limit_velocity()
@@ -127,7 +130,11 @@ function character:limit_velocity()
         end
     end
 end
-
+function character:death()
+    --more death stuff
+    self.state = 'moving'
+    self.curranim = self.anim['death']
+end
 function character:draw()
     love.graphics.polygon("line", self.body:getWorldPoints(self.shape:getPoints()))
     self:draw_unit(self.image, self.curranim)
