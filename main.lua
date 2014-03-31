@@ -6,6 +6,7 @@ require 'createlevel'
 require 'camera'
 require 'level'
 require 'animation_loader'
+require 'menu'
 
 state = "game"
 
@@ -20,6 +21,7 @@ function love.load()
     love.window.setTitle("TheRitual")
     success = love.window.setMode(800,600,flags)
     splash.load()
+    menu.load()
     game.load()
     love.graphics.setBackgroundColor(104, 136, 248)
 end
@@ -27,6 +29,9 @@ end
 function love.update(dt)
     if state == "splash" then
         splash.update(dt)
+    end
+    if state == "menu" then
+        menu.update(dt)
     end
     if state == "game" then
         game.update(dt)
@@ -36,6 +41,9 @@ end
 function love.draw()
     if state == "splash" then
         splash.draw()
+    end
+    if state == "menu" then
+        menu.draw()
     end
     if state == "game" then
         game.draw()
@@ -48,6 +56,9 @@ function love.keypressed(key)
     end
     if state == "splash" then
         splash.keypressed(key)
+    end
+    if state == "menu" then
+        menu.keypressed(key)
     end
     if state == "game" then
         game.keypressed(key)

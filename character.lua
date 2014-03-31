@@ -1,19 +1,21 @@
 character = unit:new(...)
 
 function character:init()
-    self.image = love.graphics.newImage("assets/img/darkelf/DA_female1.png")
+    self.image = love.graphics.newImage("assets/img/darkelf/DA_male1.png")
     self.controls_enabled = true
+
+    -- semi false values due to hitbox
     self.width = 64
     self.height = 64
 
-    self.anim = animation_loader.load('assets/img/darkelf/meta')
+    self.anim = animation_loader.load('assets/img/darkelf/DA_male1_meta')
     self.curranim = self.anim['walkr']
 
     self.walkspeed = 200
     self.runspeed = 400
+    self.jumpforce = 120
     self.grounded = false
-    self.state = "idle"
-    self.direction = 0
+    self.state = 'idle'
 end
 
 function character:update(dt)
@@ -31,10 +33,10 @@ function character:update(dt)
     end
     self:limit_velocity()
     self.frame = self:compute_animation(self.curranim, self.state, dt)
-    if self.direction ~= self:getDirection() then self.direction = self:getDirection() end -- solve this so that it does not need to be called here...
+    self:update_unit(dt)
     self.state = "idle"
 
-    if self.curranim == self.anim.walk_l then
+    if self.curranim == self.anim['walkl'] then
         self.look = -1
     else
         self.look = 1
@@ -43,9 +45,9 @@ end
 
 function character:keypressed(key)
     if self.controls_enabled then
-        if key == "j" then
+        if key == " " then
             if self.grounded then
-                self.body:applyLinearImpulse(0, -120)
+                self.body:applyLinearImpulse(0, -self.jumpforce)
                 self.grounded = false
             end
         end

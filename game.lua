@@ -1,14 +1,16 @@
+require 'gui'
 require 'unit'
 require 'character'
+require 'basic_enemy'
+require 'basic_ai'
+require 'menu'
 
 game = {}
 
-t = 0
-
 function game.load()
-    buf = 0
+    gui.load()
     scale=1
-    brick = love.graphics.newImage("bricks.jpg") -- store in table!!!
+    brick = love.graphics.newImage("assets/img/bricks.jpg") -- store in table!!!
     text = ""
     love.physics.setMeter(64)
 
@@ -18,8 +20,17 @@ function game.load()
     game.objects = {}
     game.objects = level.buildLevel(world)
 
+    units = {}
+
     player = character:new()
-    player:spawn(world, level.charSpawnX-20/2, level.charSpawnY-20/2, "dynamic", "player")
+    player:spawn(world, level.charSpawnX-20/2, level.charSpawnY-20/2, 'dynamic', 'player')
+
+--    for i = 1, 4 do
+--        table.insert(units, basic_enemy:new())
+--    end
+--    for i, e in pairs(units) do
+--        e:spawn(world, i*400, 600, 'dynamic', 'enemy'..i)
+--    end
 
     --Camera stuff
     camera:scale(scale)
@@ -28,7 +39,13 @@ end
 
 function game.update(dt)
     world:update(dt) --this puts the world into motion
+    basic_ai.check_proximity(player, units)
+
     player:update(dt)
+    for i, e in pairs(units) do
+        e:update(dt)
+    end
+
     if string.len(text) > 500 then
         text = ""
     end
@@ -38,14 +55,15 @@ function game.update(dt)
 
     local charX, charY = player.body:getPosition()
     --fixed on player
-    
-    local cameraXPoint = charX-((screen_width/2)*scale)+player.look*50
+
+    local cameraXPoint = charX-((screen_width/2)*scale)+player.look*100
     local cameraYPoint = charY-((screen_height/2)*scale)
     camera:setPositionWithCerp(cameraXPoint, cameraYPoint)
 end
 
 function game.keypressed(key)
     player:keypressed(key)
+    gui.keypressed(key)
 end
 
 function game.keyreleased(key)
@@ -74,13 +92,17 @@ function game.draw()
         i=i-1
     end
 
+    gui.draw( camera.x, camera.y )
+
     love.graphics.setColor(255, 255, 255)
     player:draw()
-
-    love.graphics.setColor(0,0,0, 150)
-    love.graphics.rectangle("fill",camera.x , camera.y, 300, 300)
-    love.graphics.setColor(255, 255, 255)
-    love.graphics.print(text, camera.x, camera.y)
+    for i, e in pairs(units) do
+        e:draw()
+    end
+--    love.graphics.setColor(0,0,0, 150)
+--    love.graphics.rectangle("fill",camera.x , camera.y, 300, 300)
+--    love.graphics.setColor(255, 255, 255)
+--    love.graphics.print(text, camera.x, camera.y)
 
     camera:unset()
 end

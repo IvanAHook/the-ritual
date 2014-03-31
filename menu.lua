@@ -1,14 +1,33 @@
-function menu()
-    local menu1 = { text = "option1", x = 100, y = 200, color = {255, 255, 255} }
-    local menu2 = { text = "option2", x = 100, y = 240, color = {0,255, 255} }
-    local menu = { menu1, menu2 }
-    return menu
+menu =  {}
+
+function menu.load()
+    menu.menus= {}
+    menu.menus.menu1 = { text = "play", outcome='game', x = 100, y = 200, color = {255, 255, 255}, id = 1 }
+    menu.menus.menu2 = { text = "option2", x = 100, y = 240, color = {0,255, 255}, id = 2 }
+    menu.selected = 1
 end
 
-function love.draw()
-    local menu = menu()
-    love.graphics.setColor(menu[1]["color"])
-    love.graphics.print(menu[1]["text"], menu[1]["x"], menu[1]["y"])
-    love.graphics.setColor(menu[2]["color"])
-    love.graphics.print(menu[2]["text"], menu[2]["x"], menu[2]["y"])
+function menu.update()
+end
+
+function menu.keypressed(key)
+    if key == 's' then
+        menu.selected = menu.selected + 1
+    end
+    if key == 'w' then
+        menu.selected = menu.selected - 1
+    end
+    if key == 'e' then
+    end
+end
+
+function menu.draw()
+    for i, m in pairs(menu.menus) do
+        if m['id'] == menu.selected then
+            love.graphics.setColor(0, 0, 200)
+        else
+            love.graphics.setColor(m["color"])
+        end
+        love.graphics.print(m["text"], m["x"], m["y"])
+    end
 end

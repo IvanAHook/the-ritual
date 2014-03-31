@@ -13,23 +13,34 @@ function unit:spawn(world, x, y, object_type, userdata)
     self.fixture:setUserData(userdata)
     self.body:setFixedRotation(true)
 
+    self.direction = 0
     self.lastx, self.lasty = x, y
 end
 
-function unit:getDirection() -- not working
+function unit:update_unit(dt)
+    self:update_direction()
+end
+
+function unit:update_direction()
     if self.body then
         local x, y = self.body:getPosition()
-        local direction
         if x > self.lastx then
-            direction = 1
+            self.direction = 1
         elseif x < self.lastx then
-            direction = -1
+            self.direction = -1
         elseif x == self.lastx then
-            direction = 0
+            self.direction = 0
         end
         self.lastx, self.lasty = x, y
-        return direction
     end
+end
+
+function unit:die()
+
+end
+
+function unit:get_direction()
+    return self.direction
 end
 
 function unit:compute_animation(animation, state, dt)

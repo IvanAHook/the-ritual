@@ -1,8 +1,8 @@
 require'Platform'
 
-boarder = Platform:new()
+border = Platform:new()
 
-function boarder:init()
+function border:init()
     self.red = 0
     self.green = 255
     self.blue = 0

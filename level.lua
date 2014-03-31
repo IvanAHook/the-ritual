@@ -1,8 +1,8 @@
-require('createlevel')
-require('simple_platform')
-require'box'
-require'boarder'
-require'ramp'
+require 'createlevel'
+require 'simple_platform'
+require 'box'
+require 'border'
+require 'ramp'
 level = {}
 
 function level.buildLevel(world)
@@ -13,13 +13,13 @@ function level.buildLevel(world)
 
     objects = {}
 
-    --[[table.insert(objects, level_boarders_roof(level.width,level.height))
-    table.insert(objects, level_boarders_ground(level.width,level.height))
-    table.insert(objects, level_boarders_r_wall(level.width,level.height))
-    table.insert(objects, level_boarders_l_wall(level.width,level.height))
+    --[[table.insert(objects, level_borders_roof(level.width,level.height))
+    table.insert(objects, level_borders_ground(level.width,level.height))
+    table.insert(objects, level_borders_r_wall(level.width,level.height))
+    table.insert(objects, level_borders_l_wall(level.width,level.height))
 ]]
     for i=1,4 do
-        object = boarder:new()
+        object = border:new()
         local thickness = 20
         if i == 1 then
             --roof
