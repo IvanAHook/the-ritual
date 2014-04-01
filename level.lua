@@ -1,12 +1,13 @@
 require 'createlevel'
-require 'simple_platform'
-require 'box'
-require 'border'
-require 'ramp'
+require 'world/simple_platform'
+require 'world/box'
+require 'world/border'
+require 'world/ramp'
+require 'world/switch_door'
 level = {}
 
 function level.buildLevel(world)
-    local current_level = createlevel.get_objects_from_file("map")
+    local current_level = createlevel.get_objects_from_file("levels/mapX")
 
     level.width = current_level.width
     level.height = current_level.height
@@ -44,11 +45,15 @@ function level.buildLevel(world)
             object:spawn(world,current_level[i].x,current_level[i].y
                         ,current_level[i].width,current_level[i].height,"static", "simple_platform")
             table.insert(objects, object)
-
+        elseif level[i].object_type == "D" then
+--            object = switch_door:new()
+--            object:spawn()
         elseif level[i].object_type == "B" then
             object = box:new()
             object:spawn(world,current_level[i].x,current_level[i].y
                         ,current_level[i].width,current_level[i].height,"dynamic","box")
+            object.fixture:setRestitution(0)
+            object.fixture:setFriction(1)
             table.insert(objects, object)
         elseif level[i].object_type == "r" then
             object = ramp:new()

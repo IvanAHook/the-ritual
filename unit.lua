@@ -60,3 +60,27 @@ end
 function unit:draw_unit(image, animation)
     love.graphics.draw(image, animation[self.frame], self.body:getX()-32, self.body:getY()-32)
 end
+
+--death
+function unit:death()
+    --some generic death stuff
+end
+--movment
+function unit:moveRight(force)
+    self.body:applyForce(force, 0)
+    self.state = "moving"
+end
+
+function unit:moveLeft(force)
+    self.body:applyForce(-force, 0)
+    self.state = "moving"
+end
+
+function unit:moveUp(force)
+    self.body:applyForce(0,-force)
+end
+
+function unit:moveDown(force)
+    self.body:applyForce(0,force)
+end
+

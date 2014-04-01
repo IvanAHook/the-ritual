@@ -1,4 +1,4 @@
-require'Platform'
+require'world/Platform'
 
 ramp = Platform:new()
 

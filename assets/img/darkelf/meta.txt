@@ -1,8 +1,0 @@
-quad: X, Y
-img: w=X, h=Y
-
-idle: row=n, length=n
-walk_r: row=n, length=n
-walk_l: row=n, length=n
-jump: row=n, length=n
-death: row=n, length=n

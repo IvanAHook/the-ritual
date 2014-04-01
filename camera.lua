@@ -4,6 +4,7 @@ camera.y = 0
 camera.scaleX = 1
 camera.scaleY = 1
 camera.rotation = 0
+camera.layers = {}
 
 function camera:set()
     love.graphics.push()
@@ -60,6 +61,23 @@ function clamp(n, min, max)
     if min == nil or max == nil then return n end
 
     return n < min and min or (n > max and max or n)
+end
+
+function camera:newLayer(scale, func)
+    table.insert(self.layers, {draw = func, scale = scale})
+    table.sort(self.layers, function(a, b) return a.scale < b.scale end)
+end
+
+function camera:draw()
+    local bx,by = self.x, self.y
+
+    for _, v in ipairs(self.layers) do
+        self.x = bx * v.scale
+        self.y = by * v.scale
+        camera:set()
+        v.draw()
+        camera:unset()
+    end
 end
 
 function cerp(a,b,t) local f=(1-math.cos(t*math.pi))*.5 return a*(1-f)+b*f end

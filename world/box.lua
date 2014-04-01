@@ -9,5 +9,6 @@ end
 
 function box:draw()
     love.graphics.setColor( self.red, self.green, self.blue )
-    love.graphics.draw( self.image, self.body:getX()-10, self.body:getY()-10 )
+    love.graphics.draw( self.image, self.body:getX(), self.body:getY(), self.body:getAngle(),
+                        1, 1, self.image:getWidth()/2, self.image:getHeight()/2 )
 end

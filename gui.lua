@@ -1,7 +1,9 @@
-gui = {}
+gui = class:new{}
 
-function gui.load()
+function gui:load()
     -- load strings from file
+    gui.padding = 4
+
     gui.staticstr = {}
     gui.staticstr['info'] = {}
     gui.staticstr['info'].text = 'det är info!'
@@ -12,10 +14,10 @@ function gui.load()
     gui.str['test'].text = 'jak er förkyld'
 end
 
-function gui.update()
+function gui:update()
 end
 
-function gui.keypressed( key )
+function gui:keypressed( key )
     if key == 'e' then
         for i, s in pairs( gui.str ) do
             if s.visible == true then
@@ -25,19 +27,21 @@ function gui.keypressed( key )
     end
 end
 
-function gui.draw( camX, camY )
+function gui:draw( camX, camY )
     love.graphics.setColor( 255, 255, 255 )
     love.graphics.rectangle( 'fill', camX, camY, 800, 20 )
     for i, s in pairs( gui.staticstr ) do
         love.graphics.setColor( 0, 0, 0 )
+        love.graphics.rectangle( 'line', camX, camY, 800, 20 )
         love.graphics.print( s.text, camX+4, camY+4 )
     end
     for i, s in pairs( gui.str ) do
         if s.visible == true then
             love.graphics.setColor( 255, 255, 255 )
-            love.graphics.rectangle( 'fill', 400, 600, 100, 20 )
+            love.graphics.rectangle( 'fill', 400, 300, 90, 20 )
             love.graphics.setColor( 0, 0, 0 )
-            love.graphics.print( s.text, 404, 604 )
+            love.graphics.rectangle( 'line', 400, 300, 90, 20 )
+            love.graphics.print( s.text, 400+gui.padding, 300+gui.padding )
         end
     end
 end
